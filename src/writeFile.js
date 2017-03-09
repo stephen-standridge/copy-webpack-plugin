@@ -89,15 +89,24 @@ export default function writeFile(globalRef, pattern, file) {
                 }
 
                 file.webpackTo = loaderUtils.interpolateName(
-                    {resourcePath: file.relativeFrom},
+                    { resourcePath: file.relativeFrom },
                     file.webpackTo,
-                    {content});
+                    { content });
 
                 // Add back removed dots
                 if (dotRemoved) {
                     let newBasename = path.basename(file.webpackTo);
                     file.webpackTo = path.dirname(file.webpackTo) + '/.' + newBasename;
                 }
+            }
+
+            if (pattern.toType === 'function') {
+                file.webpackTo = pattern.to(file.absoluteFrom, {
+                    hash: globalRef.compilation.hash,
+                    chunkHash: loaderUtils.interpolateName({}, '[hash]', { content }),
+                    name: file.relativeFrom.split('.')[0].split('/')[0],
+                    ext: file.relativeFrom.split('.')[1]
+                });
             }
 
             if (!copyUnmodified &&

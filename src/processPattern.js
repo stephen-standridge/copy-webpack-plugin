@@ -72,6 +72,8 @@ export default function processPattern(globalRef, pattern) {
                 file.webpackTo = pattern.to || file.relativeFrom;
             } else if (pattern.toType === 'template') {
                 file.webpackTo = pattern.to;
+            } else if (pattern.toType === 'function') {
+                file.webpackTo = ''
             }
 
             if (path.isAbsolute(file.webpackTo)) {
@@ -79,14 +81,21 @@ export default function processPattern(globalRef, pattern) {
                     throw '[copy-webpack-plugin] Using older versions of webpack-dev-server, devServer.outputPath must be defined to write to absolute paths';
                 }
 
-                file.webpackTo = path.relative(output, file.webpackTo);
+                if (path.isAbsolute(file.webpackTo)) {
+                    if (output === '/') {
+                        throw '[copy-webpack-plugin] Using older versions of webpack-dev-server, devServer.outputPath must be defined to write to absolute paths';
+                    }
+
+                    file.webpackTo = path.relative(output, file.webpackTo);
+                }
+
+                // ensure forward slashes
+                file.webpackTo = file.webpackTo.replace(/\\/g, '/');
+
+                info(`determined that '${from}' should write to '${file.webpackTo}'`);
+
+                return writeFile(globalRef, pattern, file);
             }
-
-            // ensure forward slashes
-            file.webpackTo = file.webpackTo.replace(/\\/g, '/');
-
-            info(`determined that '${from}' should write to '${file.webpackTo}'`);
-
-            return writeFile(globalRef, pattern, file);
-        }))));
+        }
+    ))));
 }

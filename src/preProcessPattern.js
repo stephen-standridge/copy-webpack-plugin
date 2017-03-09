@@ -32,6 +32,9 @@ export default function preProcessPattern(globalRef, pattern) {
     case path.extname(pattern.to) === '' || pattern.to.slice(-1) === '/':
         pattern.toType = 'dir';
         break;
+    case typeof pattern.to == 'function':
+        pattern.toType = 'function';
+        break;
     default:
         pattern.toType = 'file';
     }
