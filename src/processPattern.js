@@ -73,7 +73,7 @@ export default function processPattern(globalRef, pattern) {
             } else if (pattern.toType === 'template') {
                 file.webpackTo = pattern.to;
             } else if (pattern.toType === 'function') {
-                file.webpackTo = ''
+                file.webpackTo = '/'
             }
 
             if (path.isAbsolute(file.webpackTo)) {
