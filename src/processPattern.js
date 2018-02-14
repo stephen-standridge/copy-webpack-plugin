@@ -96,6 +96,5 @@ export default function processPattern(globalRef, pattern) {
 
                 return writeFile(globalRef, pattern, file);
             }
-        }
-    ))));
+        }))).catch((err) =>{throw new Error(err);})).catch((err) => { throw new Error(err)});
 }

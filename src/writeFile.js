@@ -61,6 +61,8 @@ export default function writeFile(globalRef, pattern, file) {
             }
 
             return content;
+        }).catch((err) => {
+            throw new Error(err);
         }).then((content) => {
             const hash = loaderUtils.getHashDigest(content);
 
@@ -107,6 +109,7 @@ export default function writeFile(globalRef, pattern, file) {
                     name: file.relativeFrom.split('.')[0].split('/')[0],
                     ext: file.relativeFrom.split('.')[1]
                 });
+                info(`function for ${file.absoluteFrom} resolved to '${file.webpackTo}'`);
             }
 
             if (!copyUnmodified &&
@@ -138,6 +141,10 @@ export default function writeFile(globalRef, pattern, file) {
                     return content;
                 }
             };
+        }).catch((err) => {
+            throw new Error(err);
         });
+    }).catch((err) => {
+        throw new Error(err);
     });
 }

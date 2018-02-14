@@ -99,5 +99,7 @@ export default function preProcessPattern(globalRef, pattern) {
             info(`Unrecognized file type for ${pattern.from}`);
         }
         return pattern;
+    }).catch((err)=> {
+        throw new Error(err)
     });
 }
